@@ -1,0 +1,10 @@
+galaxy_info:
+  role_name: KinD
+  author: theJaxon
+  description: Create kubernetes cluster using KinD.
+  license: GPL
+  min_ansible_version: 2.9
+  platforms:
+    - name: EL
+      versions:
+      - 8

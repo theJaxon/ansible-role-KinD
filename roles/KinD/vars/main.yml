@@ -1,0 +1,15 @@
+---
+# vars file for KinD
+docker_repo: https://download.docker.com/linux/centos/8/$basearch/stable/
+docker_key: https://download.docker.com/linux/centos/gpg
+
+packages:
+- docker-ce 
+- git
+
+# URLs for kubectl and kind binaries 
+url_list:
+- name: kubectl 
+  url: "{{ k8s_releases }}/{{ kubectl_v }}/{{ kubectl_binary }}"
+- name: kind 
+  url: "https://kind.sigs.k8s.io/dl/{{ kind_v }}/kind-linux-amd64"

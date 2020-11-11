@@ -1,0 +1,11 @@
+---
+# defaults file for KinD
+username: vagrant
+
+# kubectl 
+k8s_releases: https://storage.googleapis.com/kubernetes-release/release
+kubectl_binary: bin/linux/amd64/kubectl
+kubectl_v: ""
+
+# KinD 
+kind_v: ""

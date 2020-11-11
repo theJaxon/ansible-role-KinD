@@ -1,0 +1,59 @@
+---
+# tasks file for KinD
+- name: Add Docker-CE repo 
+  yum_repository:
+    name: docker-ce 
+    description: Docker community edition repository
+    baseurl: "{{ docker_repo }}"
+    gpgcheck: True 
+    gpgkey: "{{ docker_key }}" 
+
+- name: Install docker-ce and git 
+  yum: 
+    name: "{{ packages }}"
+    state: latest 
+
+- name: Add current user to docker group 
+  user:
+    name: "{{ username }}"
+    groups: docker 
+    append: True 
+
+- name: Start and enable docker service
+  service:
+    name: docker 
+    state: started
+    enabled: True 
+
+# - name: Reboot server to run docker without sudo 
+#   reboot:
+#     test_command: whoami
+#   ignore_errors: True 
+
+- name: Get latest stable version tag of kubectl 
+  shell: curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
+  register: kubectl_tag
+
+- name: Get latest stable version tag of KinD 
+  shell: curl https://api.github.com/repos/kubernetes-sigs/kind/releases/latest | grep tag_name | cut -d '"' -f4
+  register: kind_tag
+
+- set_fact:
+    kubectl_v: "{{ kubectl_tag.stdout }}"
+    kind_v: "{{ kind_tag.stdout }}"
+  
+- name: Install kubectl and KinD binaries 
+  get_url:
+    url: "{{ item.url }}"
+    dest: "/usr/bin/{{ item.name }}"
+    mode: '0777'
+    owner: "{{ username }}"
+  loop: "{{ url_list }}"
+
+- name: Create a cluster using KinD 
+  become_user: "{{ username }}"
+  command: kind create cluster
+
+- name: Start KinD 
+  become_user: "{{ username }}"
+  shell: kubectl cluster-info --context kind-kind
