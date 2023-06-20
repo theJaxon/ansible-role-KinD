@@ -1,0 +1,18 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: jaxon
+nodes:
+- role: control-plane
+  extraMounts:
+  - hostPath: kind-volume
+    containerPath: /kind-volume
+- role: worker
+  extraMounts:
+  - hostPath: kind-volume
+    containerPath: /kind-volume
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        system-reserved: memory=6Gi
