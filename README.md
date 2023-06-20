@@ -17,3 +17,16 @@ To interact with the newly created cluster use:
 ```bash
 kubectl cluster-info --context kind-kind
 ```
+
+---
+
+```bash
+# Create a KinD Cluster Declarative approach
+kind create cluster --config=cluster.yaml 
+
+# Create a KinD cluster via imperative approach
+KIND_EXPERIMENTAL_PROVIDER=podman kind create cluster --name jaxon
+
+# Delete Cluster
+kind delete cluster --name jaxon
+```
